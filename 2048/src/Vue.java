@@ -19,6 +19,10 @@ public class Vue extends JFrame {
     public JMenuBar menuBar;
     public JMenu option;
     public JMenu size;
+    public JMenu scores;
+    public JMenuItem scoreLow;
+    public JMenuItem scoreMedium;
+    public JMenuItem scoreBig;
     public JMenuItem sizeLow;
     public JMenuItem sizeMedium;
     public JMenuItem sizeBig;
@@ -54,7 +58,12 @@ public class Vue extends JFrame {
         size.add(sizeBig);
         option.add(size);
         option.add(restart);
+        scores.add(scoreLow);
+        scores.add(scoreMedium);
+        scores.add(scoreBig);
+
         menuBar.add(option);
+        menuBar.add(scores);
         menuBar.add(score, RIGHT_ALIGNMENT);
 
         setJMenuBar(menuBar);
@@ -95,6 +104,10 @@ public class Vue extends JFrame {
         sizeBig = new JMenuItem("Grande");
         restart = new JMenuItem("Recommencer");
         score = new JLabel("Score: " + model.getScoreString());
+        scores = new JMenu("Meilleurs scores");
+        scoreLow = new JMenuItem("Petite");
+        scoreMedium = new JMenuItem("Moyenne");
+        scoreBig = new JMenuItem("Grande");
     }
 
     public void setControlKey(ControlKey controlkey) {
@@ -176,8 +189,10 @@ public class Vue extends JFrame {
             JOptionPane message = new JOptionPane();
             if (model.hasWon()){
                 message.showMessageDialog(this, "Vous avez gagné !", "VICTOIRE", JOptionPane.INFORMATION_MESSAGE);
+                model.setBestScores();
             }else{
                 message.showMessageDialog(this, "Vous avez perdu !", "DEFAITE", JOptionPane.INFORMATION_MESSAGE);
+                model.setBestScores();
             }
         }
     }
@@ -187,6 +202,9 @@ public class Vue extends JFrame {
         sizeMedium.addActionListener(cm);
         sizeBig.addActionListener(cm);
         restart.addActionListener(cm);
+        scoreLow.addActionListener(cm);
+        scoreMedium.addActionListener(cm);
+        scoreBig.addActionListener(cm);
     }
 
     public void redraw() {
@@ -198,5 +216,29 @@ public class Vue extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public void displayScore(String type) {
+        String text = "";
+        int ind;
+        switch (type){
+            case "low":
+                ind = 0;
+                break;
+            case "medium":
+                ind = 1;
+                break;
+            case "big":
+                ind = 2;
+                break;
+            default:
+                ind = 0;
+                break;
+        }
+        for (int i = 0; i < 3; i++){
+            text += String.valueOf(i + 1) + ". " + String.valueOf(model.getScore(ind, i)) + "\n";
+        }
+        JOptionPane message = new JOptionPane();
+        message.showMessageDialog(this, text, "Scores", JOptionPane.INFORMATION_MESSAGE);
     }
 }

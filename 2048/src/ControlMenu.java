@@ -29,6 +29,12 @@ public class ControlMenu implements ActionListener{
         }else if (e.getSource() == vue.restart){
             model.setGridSize(4);
             vue.redraw();
+        }else if (e.getSource() == vue.scoreLow){
+            vue.displayScore("low");
+        }else if (e.getSource() == vue.scoreMedium){
+            vue.displayScore("medium");
+        }else if (e.getSource() == vue.scoreBig){
+            vue.displayScore("big");
         }
         vue.setControlMenu(this);
     }
